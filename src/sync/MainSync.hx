@@ -127,7 +127,7 @@ class MainSync
 			userGroup.set(r.user_id, submap);
 		}
 		
-		var latestsync = Manager.cnx.request("SELECT MAX(syncTimestamp) as timestamp FROM Survey").results().first().timestamp();
+		var latestsync = Manager.cnx.request("SELECT MAX(syncTimestamp) as timestamp FROM Survey").results().first().timestamp;
 		
 		
 		//Todos os valores de enums -> usa as keys "EnumName" e "Old_val" => "New_val" para conversão das entradas originais para as novas
@@ -588,7 +588,7 @@ class MainSync
 			var now = Date.now().getTime();
 			//5s
 			var dif = 5000;
-			if ((now - dif) < f && f < (now + dif))
+			if (Math.abs(f - now) > dif)
 			{
 				throw "Error: Time difference is too damn high!";
 			}
