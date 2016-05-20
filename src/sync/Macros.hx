@@ -51,7 +51,7 @@ class Macros {
 	public static macro function validateEntry(tableClass : Expr, ignoreParams : Expr, whereParams : Expr, curEntry : Expr)
 	{
 		return macro {
-			
+			//trace('iddddd  + ' + $curEntry.id);
 			var fulltblname = Type.getClassName($tableClass).split(".");
 			var tblname = fulltblname[fulltblname.length -1];
 			
@@ -65,9 +65,9 @@ class Macros {
 				str = str + $whereParams[i].key + "=" + $whereParams[i].value;
 				i++;
 			}
-			
+			//trace('iddddd 222 + ' + $curEntry.id);
 			var old_entry = $tableClass.manager.unsafeObject("SELECT * FROM " + tblname + str+" ORDER BY syncTimestamp DESC LIMIT 1", false);
-			
+			//trace('iddddd 333 + ' + $curEntry.id);
 			var shouldInsert = false;
 			if (!insertMode)
 			{
@@ -84,29 +84,40 @@ class Macros {
 					}
 				}
 				
-				$curEntry = old_entry;
-				
+				$curEntry = old_entry;				
 			}
 			else
 			{
-				try
+				//trace("wololooo");
+				try				
 				{
-					//Qualquer tabela que não a session
+					//trace("11111111111111111");
+					//trace(Reflect.hasField(old_entry, "isDeleted"));
+					//Qualquer tabela que não a session					
+					//trace('iddddd  + 444 ' + $curEntry.id);
 					if (Reflect.hasField(old_entry,"isDeleted"))
 					{
+						//trace("Nigga stole my bike!");
 						if(Reflect.field(old_entry, "isDeleted") == false)
 							$curEntry.insert();
 						else
 							$curEntry = old_entry;
 					}
 					else
+					{
+						//trace("hello darkness my old friend");
+						//trace($curEntry);
 						$curEntry.insert();
-					
+						//trace("kthnxbye");
+					}
+					//trace("check?");
 					var v = ours.get(tblname) != null ? ours.get(tblname) : 0;
-					ours.set(tblname, v+1);
+					ours.set(tblname, v + 1);
+					//trace("aaaaaaaaargh");
 				}
 				catch (e : Dynamic)
 				{
+					trace(e);
 					Macros.criticalError(tblname, e);
 				}
 			}

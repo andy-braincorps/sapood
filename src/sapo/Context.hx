@@ -17,8 +17,8 @@ import sapo.spod.User;
 import sys.db.*;
 
 class Context {
-	static var DBPATH = Sys.getEnv(SAPO_DB);
-	static var STATICPATH = Sys.getEnv(STATIC_FILES);
+	static var DBPATH = Sys.getEnv("SAPO_DB");
+	static var STATICPATH = Sys.getEnv("STATIC_FILES");
 
 	public static var version(default,null) = { commit : Version.getGitCommitHash() }
 	public static var now(default,null):HaxeTimestamp;

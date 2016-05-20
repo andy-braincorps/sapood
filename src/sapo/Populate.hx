@@ -222,7 +222,7 @@ class Populate {
 		p.date = DateTools.delta(m.date, 1000 * 60 * rnd.float());
 		p.isEdited = rndTrue(.1) ? rnd.int(10) : 0;
 		p.isDeleted = rndTrue(.05);
-		p.isPontoProx = rndTrue();
+		p.isPontoProximo = rndTrue();
 		p.morador = m;
 		p.motivo = Type.createEnumIndex(Motivo, rnd.int(14));
 		p.motivoOutraPessoa = Type.createEnumIndex(Motivo, rnd.int(14));

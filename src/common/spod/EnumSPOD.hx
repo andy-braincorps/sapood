@@ -96,7 +96,7 @@ import sys.db.Types.SString;
 	@dbVal(2) @tt("pagto: cartão") Cartao;
 	@dbVal(3) @tt("pagto: VT") VT;
 	@dbVal(4) @tt("pagto: estudante") Estudante;
-	@dbVal(5) @tt("pagto: gratuidade") Gratuidade;
+	@dbVal(10) @tt("pagto: gratuidade") Gratuidade;
 	@dbVal(99) @tt("pagto: outros") Outros;
 	@dbVal(101) @tt("pagto: não respondeu") NaoRespondeu;
  }
@@ -120,7 +120,7 @@ import sys.db.Types.SString;
 	 @dbVal(3) @tt("Pré-Escolar") PreEscolar;
 	 @dbVal(4) @tt("Fundamental incompleto") FundamentalIncompleto;
 	 @dbVal(5) @tt("Fundamental completo") FundamentalCompleto;
-	 @dbVal(6) @tt("Médio incompleto") MedioIncompleto;
+	 @dbVal(6) @tt("Ensino médio incompleto") MedioIncompleto;
 	 @dbVal(7) @tt("Ensino médio Completo") MedioCompleto;
 	 @dbVal(8) @tt("Superior incompleto") SuperiorIncompleto;
 	 @dbVal(9) @tt("Superior completo") SuperiorCompleto;

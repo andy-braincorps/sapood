@@ -12,8 +12,11 @@ import sys.db.Types;
 class Survey extends Object {
 	public var id : SId;
 	public var user_id : SInt; 
+	public var userlogin : SString<255>; 
 	public var tentativa_id : SNull<Int>;
 
+	public var client_ip : SNull<SString<255>>;
+	
 	public var lastPageVisited : SNull<SString<255>>;
 	public var isValid : SBool;
 	
@@ -181,7 +184,7 @@ class Ponto extends Object {
 	public var json : Null<String>;
 
 	@:relation(copiedFrom_id) public var copiedFrom : SNull<Ponto>;
-	public var isPontoProx : SNull<SBool>;
+	public var isPontoProximo : SNull<SBool>;
 	@:relation(pontoProx_id) public var pontoProx : SNull<Ponto>;
 	public var old_id : SInt;
 	public var syncTimestamp : SFloat;

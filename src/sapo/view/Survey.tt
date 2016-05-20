@@ -179,7 +179,7 @@ function onSubmitTicket()
 						<!-- PONTO -->
 						<p>
 							<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-							<b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto (: p.ordem :) ((: Util.enumText(p.motivo) :)(: if p.isPontoProx :), [Ponto Próximo](: end :)):</b> 
+							<b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto (: p.ordem :) ((: Util.enumText(p.motivo) :)(: if p.isPontoProximo :), [Ponto Próximo](: end :)):</b> 
 							(: if p.motivoOutraPessoa != null :)(Motivo da outra pessoa: (: Util.enumText(p.motivoOutraPessoa) :))(: end :)
 							((: p.uf.desc :)
 							(: if p.city_id != null :) - (: p.city_id :)(: end :)

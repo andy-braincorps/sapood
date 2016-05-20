@@ -1,4 +1,6 @@
 package sync;
+import common.crypto.Password;
+import common.db.MoreTypes.EmailAddress;
 import common.db.MoreTypes.HaxeTimestamp;
 import common.spod.EnumSPOD;
 import sapo.Populate;
@@ -18,6 +20,7 @@ import sapo.spod.Survey;
 import sapo.spod.Ticket;
 import sapo.spod.User;
 import sapo.spod.User.Group;
+import common.db.MoreTypes;
 import sys.db.TableCreate;
 
 import sys.db.Connection;
@@ -66,6 +69,7 @@ class MainSync
 
 	public static function main()
 	{
+		//TODO: Linkar isso
 		SYNC_USER = Sys.getEnv("SYNC_USER");
 		TARGET_GROUP = Sys.getEnv("TARGET_GROUP");
 		
@@ -90,8 +94,99 @@ class MainSync
 		}
 		//END
 		
+		/*TODO: SOLVE THIS!!! 
 		author = User.manager.get(Std.parseInt(SYNC_USER), false);
 		group = Group.manager.select($name == TARGET_GROUP, null, false);
+		*/
+		//Workaround
+		//groups
+		var group = Group.manager.select($name == "Internal", null, false);
+		if(group == null)		
+		{
+			group = new Group(PSuperUser, "Internal");
+			group.insert();
+		}
+		
+		var sus = Group.manager.select($name == "Super-Usuários", null, false);
+		if(sus == null)		
+		{
+			sus = new Group(PSuperUser, "Super-Usuários");
+			sus.insert();
+		}
+				
+		var surv = Group.manager.select($name == "Supervisores", null, false);
+		if (surv == null)
+		{
+			surv = new Group(PSupervisor, "Supervisores");
+			surv.insert();
+		}
+		
+		var telops = Group.manager.select($name == "Telefonistas", null, false);
+		if (telops == null)
+		{
+			telops = new Group(PPhoneOperator, "Telefonistas");
+			telops.insert();
+		}
+		
+		var pesq = Group.manager.select($name == "Pesquisadores", null, false);
+		if (pesq == null)
+		{
+			pesq = new Group(PSurveyor, "Pesquisadores");
+			pesq.insert();
+		}
+		
+		//persons
+		author = User.manager.get(819485, false);
+		if (author == null)
+		{			
+			author = new User(group, new EmailAddress("internal@sapo"), "Internal User");
+			author.id = 819485;
+			author.password = Password.make("hellodarknessmyoldfriend666");
+			author.insert();
+		}		
+		
+		var su = User.manager.get(50000, false);
+		if (su == null)
+		{
+			su = new User(sus, new EmailAddress("superuser@su"), "Super-usuário");
+			su.id = 50000;
+			su.password = Password.make("senhadetestedosuperuser");
+			su.insert();
+		}
+		
+		var surveyor = User.manager.get(10000, false);
+		if (surveyor == null)
+		{
+			surveyor = new User(surv, new EmailAddress("supervisor@surv"), "Supervisor");
+			surveyor.id = 10000;
+			surveyor.password = Password.make("senhadetestedosupervisor");
+			surveyor.insert();
+		}
+		
+		var phoneop = User.manager.get(5000, false);
+		if (phoneop == null)
+		{			
+			phoneop = new User(telops, new EmailAddress("phoneop@telops"), "Telefonista");
+			phoneop.id = 5000;
+			phoneop.password = Password.make("senhadetestedatelefonista");
+			phoneop.insert();
+		}
+		
+		//TODO: Solve this too!
+		var pc = 1;
+		var pesquisadores = [{ email : "treinamento@email.com", pass : "treinamento" }, { email : "adriana.queiroz.silva@hotmail.com", pass : "92890430" }, { email : "albertomlessa@gmail.com", pass : "43702595" }, { email : "tralli.alexandre@gmail.com", pass : "36458961" }, { email : "carolvtralli@gmail.com", pass : "31844192" }, { email : "andressajaiana@outlook.com", pass : "19718316" }, { email : "redutodaarte@gmail.com", pass : "10715749" }, { email : "charlafabiane@gmail.com", pass : "10400128" }, { email : "claudiapiola@hotmail.com", pass : "69726493" }, { email : "albuquerquedaniel141@gmail.com", pass : "47492938" }, { email : "deborahfonseca.bsb@hotmail.com", pass : "37973826" }, { email : "fabianoandrhe@gmail.com", pass : "48988096" }, { email : "feliper.catarino@gmail.com", pass : "52008954" }, { email : "rca637@hotmail.com", pass : "80512853" }, { email : "ana.martins039@gmail.com", pass : "13243563" }, { email : "leandrohande@gmail.com", pass : "81515602" }, { email : "marlene.limadf@hotmail.com", pass : "24706886" }, { email : "prisciilarosa@hotmail.com", pass : "71818010" }, { email : "quel.nascimentos@gmail.com", pass : "33260518" }, { email : "suelyjunior@hotmail.com", pass : "68301147" }, { email : "tcsousa@hotmail.com", pass : "99307917" }, { email : "thaty.lovegs@gmail.com", pass : "97827889" }, { email : "thaynanrosa@gmail.com", pass : "74692405" }, { email : "wesleylelisetc@gmail.com", pass : "88721720" }, { email : "alanpc8@gmail.com", pass : "10230395" }, { email : "danielmoreiralobato@gmail.com", pass : "60414071" }, { email : "alvesisabelab@gmail.com", pass : "19518990" }, { email : "joao.lecione@gmail.com", pass : "81995821" }, { email : "ricardoportugues@outlook.com", pass : "03980964" }, { email : "murilosribeiromsr@gmail.com", pass : "46283358" }, { email : "pedrodoamor@gmail.com", pass : "38094478" }, { email : "valdemar.nobrega@gmail.com", pass : "59078477" }, { email : "palmerston.victoria@gmail.com", pass : "29618522" }, { email : "aluria.vasquez@gmail.com", pass : "44237611" }, { email : "Barbaramorenapimentel@gmail.com", pass : "06078506" }, { email : "cildacldf@hotmail.com", pass : "14175308" }, { email : "dutra.bueno@gmail.com", pass : "11466432" }, { email : "elzinha.luciano@hotmail.com", pass : "25948694" }, { email : "Hugo.oliveira.13@hotmail.com", pass : "35892880" }, { email : "jessicaazevedo10@live.com", pass : "49907640" }, { email : "lorrane.helen@hotmail.com", pass : "46864332" }, { email : "Pablo99maciel@gmail.com", pass : "25430416" }, { email : "rainernascimento@hotmail.com", pass : "49887293" }, { email : "vla.martins.m@gmail.com", pass : "57107376" }, { email : "regisudplay@gmail.com", pass : "98066222" }, { email : "rodrigo_santana18@yahoo.com.br", pass : "24074646" }, { email : "sheila.cristina.gomes@hotmail.com", pass : "56264965" }, { email : "wesley.arley@hotmail.com", pass : "56734235" }, { email : "wilma-luciats@hotmail.com", pass : "37047121" }];
+		for (p in pesquisadores)
+		{
+			var u = User.manager.select($email == new EmailAddress(p.email));
+			if (u == null)
+			{
+				u = new User(pesq, new EmailAddress(p.email), p.email, surveyor);
+				u.id = pc;
+				u.password = Password.make(p.pass);
+				u.insert();
+			}
+			pc++;
+		}
 		
 		syncex = new Map();
 		ours = new Map();
@@ -128,17 +223,21 @@ class MainSync
 		}
 		
 		var latestsync = Manager.cnx.request("SELECT MAX(syncTimestamp) as timestamp FROM Survey").results().first().timestamp;
+		if (latestsync == null)
+			latestsync = 0;
 		
 		
 		//Todos os valores de enums -> usa as keys "EnumName" e "Old_val" => "New_val" para conversão das entradas originais para as novas
 		//A estrutura é Map<String,Map<Int,Int>>
 		refValue = populateHash();
 
+		trace("Hash Populated!");
+		
 		// Query -> ../../extras/main.sql
 		//Session_id only
 		var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id AND sm.timestamp > "+latestsync+") UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id AND sm.timestamp > "+latestsync+") UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  AND sm.timestamp > "+latestsync+") UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  AND sm.timestamp > "+latestsync+") UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  AND sm.timestamp > "+latestsync+") UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  AND sm.timestamp >"+latestsync+")) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
 		
-		
+		trace("UpdateVars Fetched! Length: " + updateVars.length);
 
 		//Hash old_id -> new instance
 		sessHash = new Map<Int, Survey>();
@@ -148,10 +247,11 @@ class MainSync
 
 		for (u in updateVars)
 		{
+			if (u % 100 == 0) 
+				trace(u);
 			var shouldInsert = processSessionID(u, false);
-		}
-
-
+		}	
+		
 		for (k in syncex.keys())
 		{
 			var v = ours.get(k);
@@ -171,7 +271,7 @@ class MainSync
 
 	static function processSessionID(u : Int, insertMode : Bool) : Bool
 	{
-		for (p in [processSession, processFamilia, processMorador, processPonto, processModo, processOcorrencias]) {
+		for (p in [processSession, processFamilia, processMorador, processPonto, processModo, processOcorrencias]) {			
 			if (p(u, insertMode))
 				return processSessionID(u, true);
 		}
@@ -180,11 +280,18 @@ class MainSync
 
 	static function processSession(sid : Int, insertMode : Bool) : Bool
 	{
+		//trace('processSession');
 		var dbSession = targetCnx.request("SELECT * FROM Session WHERE id = " + sid).results().first();
 
 		var new_sess = new Survey();
+		var all_fields_null = true;
 		for (f in Reflect.fields(dbSession))
 		{
+			//trace('check0  ' + f);	
+			//if (f == "id")
+					//trace('id = ' + dbSession.id);
+			if (f != "id" && Reflect.field(dbSession, f) != null)
+				all_fields_null = false;
 			switch(f)
 			{
 				case "id":
@@ -193,7 +300,7 @@ class MainSync
 				case "isValid", "isRestored":
 					Reflect.setField(new_sess, f, (Reflect.field(dbSession, f) == 1));
 				//Copia simples de campo
-				case "user_id", "tentativa_id", "lastPageVisited", "codigoFormularioPapel",
+				case "user_id", "userlogin", "tentativa_id", "client_ip", "lastPageVisited", "codigoFormularioPapel",
 				"endereco_id", "pin", "latitude", "longitude",
 				 "bairro", "logradouro", "numero", "complemento","lote","estrato":
 					Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
@@ -209,16 +316,25 @@ class MainSync
 				//Enum
 				case "estadoPesquisa_id":
 					Macros.setEnumField(f, new_sess, dbSession, sid);
-				case "ponto","gps_id","client_ip", "closedFromIndex":
+				case "ponto","gps_id", "closedFromIndex", "numReopenings":
 					continue;
 				default:
 					Macros.extraField("Survey", f);
 			}
 		}
+		
+		//trace("Session = " + new_sess.old_survey_id + " all null? " + all_fields_null);		
+		if (all_fields_null)
+			return false;
+		if (new_sess.user_id == 99999)
+			return false;
+		
+		//trace('check1');
 
 		new_sess.syncTimestamp = curTimestamp;
 		if (insertMode)
 		{
+			//trace('check2');
 			var groups = userGroup.get(new_sess.user_id);
 			var biggest = 1;
 			if (groups == null)
@@ -254,12 +370,14 @@ class MainSync
 
 		}
 
+		//trace('check3');
 		//o = old_entry from Macros.validateEntry (old_entry is an old reference to the same survey)
 		var o : Survey = Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","date_paid","paymentRef","checkSV","checkCT","checkCQ","group","date_edited"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
-		
+		//trace('check4');
 		//Update fields from 
 		if (insertMode && o != null && o.date_completed != null )
 		{
+			//trace('check5');
 			new_sess.lock();
 			new_sess.paid = o.paid;
 			new_sess.paymentRef = o.paymentRef;
@@ -272,20 +390,25 @@ class MainSync
 			new_sess.group = o.group;
 			new_sess.update();
 		}
-
+		//trace('check6');
 		sessHash.set(new_sess.old_survey_id, new_sess);
 		return false;
 	}
 
 	static function processFamilia(old_sid : Int, insertMode : Bool) : Bool
 	{
+		//trace('processFamilia');
 		var dbFam = targetCnx.request("SELECT * FROM Familia WHERE session_id = " + old_sid + " ORDER BY id").results();
-		var new_familia = new Familia();
-
+		
 		for (f in dbFam)
-		{
+		{			
+			var all_fields_null = true;
+			var new_familia = new Familia();
 			for (field in Reflect.fields(f))
 			{
+				if (field != "id" && Reflect.field(f, field) != null)
+					all_fields_null = false;
+				//trace('check0  ' + field);
 				switch(field)
 				{
 					case "id":
@@ -310,25 +433,31 @@ class MainSync
 						if (checkJson("Familia", Reflect.field(f, field)))
 							Reflect.setField(new_familia, field, Reflect.field(f, field));
 					//Bool simples
-					case "isDeleted","recebeBolsaFamilia_id":
-						Reflect.setProperty(new_familia, field, Reflect.field(f, field) == 1);
+					case "isDeleted", "recebeBolsaFamilia_id":
+						var new_field = (std.StringTools.endsWith(field, "_id")) ? field.substr(0, -3) : field;
+						Reflect.setProperty(new_familia, new_field, Reflect.field(f, field) == 1);
 					//Conversao enum -> bool
-					case "tvCabo_id","vagaPropriaEstacionamento_id, ruaPavimentada_id":
+					case "tvCabo_id","vagaPropriaEstacionamento_id", "ruaPavimentada_id":
 						var v = Reflect.field(f, field);
 						Reflect.setField(new_familia, field, (v != 3) ? (v == 1) : null);
 					case "gps_id", "editedNumeroResidentes", "editsNumeroResidentes",
 					"editedNomeContato", "editsNomeContato", "editedTelefoneContato",
 					"editsTelefoneContato", "editedRendaDomiciliar", "editsRendaDomiciliar",
-					"codigoReagendamento":
+					"codigoReagendamento", "sessionTime_id":
 						continue;
 					default:
 						Macros.extraField("Familia", field);
 				}
 			}
 			new_familia.syncTimestamp = curTimestamp;
-
+			
+			if (all_fields_null)
+				continue;
+			if (new_familia.survey == null)
+				continue;
+				
 			Macros.validateEntry(Familia, ["syncTimestamp", "id"], [ { key : "old_id" , value : new_familia.old_id }, { key : "old_survey_id", value : new_familia.old_survey_id } ], new_familia);
-
+			
 			famHash.set(new_familia.old_id, new_familia);
 		}
 		return false;
@@ -336,12 +465,17 @@ class MainSync
 
 	static function processMorador(old_session : Int, insertMode : Bool) : Bool
 	{
+		//trace('processMorador');
 		var dbMorador = targetCnx.request("SELECT * FROM Morador WHERE session_id = " + old_session + " ORDER BY familia_id").results();
 		for (m in dbMorador)
 		{
+			var all_fields_null = true;
 			var new_morador = new Morador();
 			for (field in Reflect.fields(m))
 			{
+				if (field != "id" && Reflect.field(m, field) != null)
+					all_fields_null = false;
+				//trace('check0  ' + field);				
 				switch(field)
 				{
 					case "id":
@@ -370,7 +504,7 @@ class MainSync
 					case "json":
 						if (checkJson("Morador", Reflect.field(m, field)))
 							Reflect.setField(new_morador, field, Reflect.field(m, field));
-					case "gps_id","codigoReagendamento":
+					case "gps_id","codigoReagendamento", "sessionTime_id":
 						continue;
 					default:
 						Macros.extraField("Morador", field);
@@ -379,6 +513,11 @@ class MainSync
 
 			new_morador.syncTimestamp = curTimestamp;
 
+			if (all_fields_null)
+				continue;
+			if (new_morador.survey == null)
+				continue;
+			
 			Macros.validateEntry(Morador, ["syncTimestamp", "id"], [ { key : "old_id", value : new_morador.old_id }, { key: "old_survey_id" , value : new_morador.old_survey_id } ], new_morador);
 
 			morHash.set(new_morador.old_id , new_morador);
@@ -388,12 +527,17 @@ class MainSync
 
 	static function processPonto(session_id : Int, insertMode : Bool) : Bool
 	{
+		//trace('processPonto');
 		var dbPoints = targetCnx.request("SELECT * FROM Ponto WHERE session_id = " + session_id + " ORDER BY morador_id, ordem").results();
 		for (p in dbPoints)
 		{
 			var new_point = new Ponto();
+			var all_fields_null = true;
 			for (field in Reflect.fields(p))
 			{
+				if (field != "id" + Reflect.field(p, field) != null)
+					all_fields_null = false;
+				//trace('check0  ' + field);
 				switch(field)
 				{
 					case "id":
@@ -407,8 +551,9 @@ class MainSync
 						new_point.copiedFrom = pointhash.get(p.id);
 					case "pontoProximoRef_id":
 						new_point.pontoProx = pointhash.get(p.pontoProxRef_id);
-					case "isDeleted", "isPontoProx":
-						new_point.isDeleted = (p.isDeleted == 1);
+					case "isDeleted", "isPontoProximo":
+						var f = (Reflect.field(p, field) == null) ? null : (Reflect.field(p, field) == 1);
+						Reflect.setField(new_point, field, f);						
 					//Static refs
 					case "uf_id":
 						new_point.uf = UF.manager.get(p.uf_id);
@@ -427,7 +572,7 @@ class MainSync
 					//Enums
 					case "motivoID", "motivoOutraPessoaID":
 						Macros.setEnumField("motivo", new_point, p, session_id);
-					case "gps_id", "anterior_id", "posterior_id", "ordem", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str", "isIntermediario":
+					case "gps_id", "anterior_id", "posterior_id", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str", "isIntermediario", "sessionTime_id":
 						continue;
 					default:
 						Macros.extraField("Ponto", field);
@@ -436,6 +581,11 @@ class MainSync
 
 			new_point.syncTimestamp = curTimestamp;
 
+			if (all_fields_null)
+				continue;
+			if (new_point.survey == null)
+				continue;
+				
 			Macros.validateEntry(Ponto, [ "id", "syncTimestamp"], [ { key : "old_id", value : new_point.old_id } ], new_point);
 			pointhash.set(new_point.old_id, new_point);
 		}
@@ -445,13 +595,18 @@ class MainSync
 
 	static function processModo(session_id : Int, insertMode : Bool)
 	{
+		//trace('processModo');
 		var dbModos = targetCnx.request("SELECT * FROM Modo WHERE session_id = " + session_id + " ORDER BY morador_id, ordem").results();
 
 		for (m in dbModos)
 		{
 			var new_modo = new Modo();
+			var all_fields_null = true;
 			for(f in Reflect.fields(m))
 			{
+				if (f != "id" + Reflect.field(m, f) != null)
+					all_fields_null = false;
+				//trace('check0  ' + f);
 				switch(f)
 				{
 					case "id":
@@ -492,7 +647,7 @@ class MainSync
 						new_modo.valorViagem = m.valorViagem;
 					//fim conversao
 					//Ignore
-					case "anterior_id", "posterior_id","ordem", "gps_id", "estacaoEmbarque_str", "estacaoDesembarque_str","naoSabeLinhaOnibus", "naoSabeEstacaoEmbarque", "naoSabeEstacaoDesembarque", "naoSabeValorViagem", "naoSabeValorPagoTaxi", "naoSabeCustoEstacionamento","naoRespondeuLinhaOnibus", "naoRespondeuEstacaoEmbarque", "naoRespondeuEstacaoDesembarque", "naoRespondeuValorViagem", "naoRespondeuValorPagoTaxi","naoRespondeuCustoEstacionamento":
+					case "anterior_id", "posterior_id", "gps_id", "estacaoEmbarque_str", "estacaoDesembarque_str","naoSabeLinhaOnibus", "naoSabeEstacaoEmbarque", "naoSabeEstacaoDesembarque", "naoSabeValorViagem", "naoSabeValorPagoTaxi", "naoSabeCustoEstacionamento","naoRespondeuLinhaOnibus", "naoRespondeuEstacaoEmbarque", "naoRespondeuEstacaoDesembarque", "naoRespondeuValorViagem", "naoRespondeuValorPagoTaxi","naoRespondeuCustoEstacionamento", "sessionTime_id":
 						continue;
 					default:
 						Macros.extraField("Modo", f);
@@ -500,6 +655,12 @@ class MainSync
 			}
 
 			new_modo.syncTimestamp = curTimestamp;
+			
+			if (all_fields_null)
+				continue;
+			if (new_modo.survey == null)
+				continue;
+			
 			Macros.validateEntry(Modo, ["id", "syncTimestamp"], [ { key : "old_id" , value : new_modo.old_id } ], new_modo);
 		}
 		return false;
@@ -507,12 +668,17 @@ class MainSync
 
 	static function processOcorrencias(sid : Int, insertMode : Bool)
 	{
+		//trace('processOcorrencias');
 		var res = targetCnx.request("SELECT * FROM Ocorrencias WHERE session_id = " + sid).results();
 		for (r in res)
 		{
 			var c = new Ocorrencias();
+			var all_fields_null = true;
 			for (f in Reflect.fields(r))
 			{
+				if (f != "id" + Reflect.field(r, f) != null)
+					all_fields_null = false;
+				//trace('check0  ' + f);
 				switch(f)
 				{
 					case "id":
@@ -537,6 +703,11 @@ class MainSync
 			}
 
 			c.syncTimestamp = curTimestamp;
+			if (all_fields_null)
+				continue;
+			if (c.survey == null)
+				continue;
+				
 			Macros.validateEntry(Ocorrencias, ["id", "syncTimestamp"], [ { key : "old_id", value : c.old_id } ], c);
 		}
 
@@ -567,9 +738,23 @@ class MainSync
 
 	static function ticket(subject : String, msg : String, survey_id : Int)
 	{
+		
 		var survey = Survey.manager.get(survey_id);
+		if (survey_id == null || survey_id <= 0 || survey == null)
+		{
+			trace("TICKET ERROR! SHOULD CREATE TICKET WITH SUBJECT: -"+subject+"- AND MSG: -"+msg+"-");
+			if (survey == null)
+				trace("Survey is null! survey_id: "+survey_id);
+			trace("TODO: IMPLEMENT LOOK AHEAD TICKET CREATION");
+			return;
+		}
+		
+		//trace(author);
 		var t = new Ticket(survey, author, subject);
 		t.insert();
+		
+		var msg = new TicketMessage(t, author, msg);
+		msg.insert();
 		
 		var sub = new TicketSubscription(t, group, null);
 		sub.insert();
